@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="author" content="王平波">
+	<meta http-equiv="pragma" content="no-cache"> 
+	<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+	<meta http-equiv="expires" content="0">
+	<title>cm前端应用框架</title>
+	<link rel="stylesheet" type="text/css" href="./css/reset.css?v=0.0.1">
+	<link rel="stylesheet" type="text/css" href="./icon/style.css?v=0.0.1">
+	<link rel="stylesheet" type="text/css" href="./css/mCustomScrollbar.css?v=0.0.1">
+	<link rel="stylesheet" type="text/css" href="./css/cm.css?v=0.0.1">
+	<script type="text/javascript" src="./js/jquery/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="./js/jquery/jquery.mousewheel.js"></script>
+	<script type="text/javascript" src="./js/jquery/jquery.mCustomScrollbar.js"></script>
+	<script type="text/javascript" src="./js/jquery/jqueryExtend.js"></script>
+</head>
+<body>
+	<div id="header">
+		<h1 class="fl"><a href="index.html">cm前端应用框架</a><b></b></h1>
+		<div class="nav fl">
+			<div class="abox">
+				<a href="index.html">首页</a>
+			</div>
+		</div>
+		<div class="fr">
+			<a href="javascript:void(0);" class="icon-cog st"></a>
+			<a href="javascript:void(0);" class="icon-switch st"></a>
+		</div>
+		<div class="clr"></div>
+	</div>
+
+	<div id="main">
+		<div id="main-left">
+			<div id="left-nav" class="nav"></div>
+		</div>
+		<div id="main-right">
+			<div class="row-4 infoList" id="dir">
+				<h3 class="ttl">目录树</h3>
+				<p class="dsc">使用方法：<span class="b">var dirObj = cm.fnDirList(obj, callback).click(function(selectedData){})</span></p>
+				<pre>
+	obj => {
+		get:{
+			url:'请求路径',
+			setting:'请求数据',
+			dataPath:'数据Key'
+		},
+		ttl:'头标',							String
+		cls:'控制器',							Araay{css:'class',txt:'name',fn:function(){}}
+		addDir:'添加目录',						Funtion Or Objecte => {url:'新增接口地址',dataType:'数据类型'}
+		data:'数据',  							Array{}
+		nextData:'下一级数据Key',  					Objecte => {dataPath:'数据Key',dirName:'显示名称'}
+		id:'数据库Id',							String
+		dirName:'目录名称Key',						String
+		addDom:'添加列表层', 						Element
+		css:'主体样式',							String
+		href:'目录链接',						function(item){ return value; }
+		on:0								Number Or Array([0,0])
+	}
+
+	dirObj => {
+		updateAll:function(data){...},		//传入数据更新整个数据
+		update:function(type,thsLi,name){...}, //更新单条数据 type = String('更新 = update'||'删除 = delete')， thsLi = Element(当前元素节点)，name = String(更新的内容)
+		deleteList:function(thsLi){...},	//删除节点及数据  thsLi = Element(当前元素节点)
+		updateList:function(thsLi,name){...},	//更新节点内容
+		getOnData:function(path){...},		//根据数据路径获取数据 path = Number Or String(0-0-0)
+		listOn:function(_ths){...},		//设置当前节点， _ths = Element(a 节点)
+		addList:function(data, addDom, dirName){...},  //添加数据 data = Object(添加的数据)，addDom = Element(添加层节点)，dirName = String(显示数据Key)
+		getData:function(obj){...}	//从新获取数据  obj = obj.get
+	}
+				</pre>
+			</div>
+
+			<div class="row-4 infoList" id="table">
+				<h3 class="ttl">数据表</h3>
+				<p class="dsc">使用方法：<span class="b">var tbObj = cm.fnTbList(obj, callback)</span>
+				</p>
+				<pre>
+	obj => {
+		data:'数据',		//本地数据
+		getData:{			//请求数据
+			pageDom:'翻页层',
+			url:'请求地址',
+			setting:'请求参数',
+			page:'翻页参数',
+			totalPage:'翻页总数',
+			dataPath:'内容数据参数',
+			thsData:'页面操作数据'
+		},
+		th:{ 			//表格表头
+			name:'数据名称',
+			txt:'头标名称',
+			style:'sytle',
+			filter:'数据过滤 function(数据){ return 处理后的数据;}> '
+		},
+		dataId:'数据ID',
+		csle:[	//控制器
+			{
+				css:'样式类',
+				icon:'图标样式类',
+				txt:'名称',
+				fnCk:'点击事件触发函数 function'
+			}
+		],
+		csleType:'控制器类型 btn Or menu',
+		tbCss:'表格样式',
+		addDom:'添加层',
+		isNo:'是否显示序号',
+		Noc:'序号系数',
+		isChk:'是否增加选项框',
+		fixedth:'是否固定头部',
+		isShow:'是否显示行，function(item){ retrun Boolean}',
+		isColResize:'是否手动调整单元宽度'
+	}
+
+	tbObj => {
+		setAg:function(obj){...},	//从新设计GET请求的setting
+		fnGetData:function(getSetting,isNew),  //请求数据
+		resetShow:function(th){...},	//从新传入th对象，来显示对应的信息
+		search:function(txt){...},	//查询表格数据，根据数据来查询
+		updateList:function(data, isExtend){...}, //更新当前数据, data = Object(数据), isExtend = Boolean(是否同步数据)
+		deleteList:function(){...}, //删除当前数据, 点击操作按钮就会绑定当前数据
+		addList:function(data){...},  //添加列，  data = Object(数据)
+		success:function(fn){...},  //设置GET请求成功后进行的操作， fn = Function(操作的函数)
+		over:function(fn){...}		//设置表格生成结束后的操作， fn = Function(操作的函数)
+	}
+				</pre>
+			</div>
+
+
+			<div class="row-4 infoList" id="select">
+				<h3 class="ttl">下拉框</h3>
+				<p class="dsc">使用方法：<span class="b">var selectObj = cm.fnEleSelect(obj)</span>
+				</p>
+				<pre>
+	obj => {
+		ele:'input',		//改变成下拉框的input
+		data:'data',		//选项数据
+		name:'name',		//显示的数据key值，如（{name:'选项一',value:'1'}, key = 'name'）
+		val:'val',		//value的数据key值
+		type:'type'   	//类型，'checkbox'（多选） or 'select'（单选）
+	}
+				</pre>
+			</div>
+
+			<div class="row-4 infoList" id="linkage">
+				<h3 class="ttl">输入框联动</h3>
+				<p class="dsc">使用方法：<span class="b">var linkageObj = cm.fnDataLinkage(arObj)</span>
+				</p>
+				<pre>
+	arObj => [{节点一},{节点二}] -> Array[0] -> {
+		dom:'input节点', 
+		getData:{url:'',dKey:'可选，数据存放的key',setting:{传递后台的参数}},    //后台请求数据 与 data 二选一
+		data:'数据',    // 与 getData 二选一 
+		nextKey:'用于获取下一级数据的当前数据key',
+		toKey:'getData.setting -> 传入给下一级数据参数key', 
+		showKey:'显示key', 
+		showType:'显示类型'
+	}
+				</pre>
+			</div>
+
+			<div class="row-4 infoList" id="message">
+				<h3 class="ttl">消息框</h3>
+				<p class="dsc">使用方法：<span class="b">提示框：cm.fnAlert(txt,hint,callback), 确认框：cm.fnConfirm(txt,callback), 右下角提示框：cm.fnFixedHint(txt)</span>
+				</p>
+				<pre>
+	txt => 消息内容,
+	hint => 消息类型，'ok' Or 'err'
+	callback => 回调函数
+				</pre>
+			</div>
+		</div>
+	</div>
+
+	<div id="footer"></div>
+	<script type="text/javascript" src="./js/route/route.js?v=0.0.1"></script>
+	<script type="text/javascript" src="./js/cm.js?v=0.0.1"></script>
+	<script type="text/javascript" src="./js/fncm/createHtml.js?v=0.0.1"></script>
+	<script type="text/javascript" src="./js/fncm/RegExp.js?v=0.0.1"></script>
+	<script type="text/javascript" src="./js/fncm/data.js?v=0.0.1"></script>
+	<script type="text/javascript" src="js/html.js?v=0.0.1"></script>
+	<script type="text/javascript" src="js/doc.js?v=0.0.1"></script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="author" content="王平波">
+	<meta http-equiv="pragma" content="no-cache"> 
+	<meta http-equiv="Cache-Control" content="no-cache, must-revalidate"> 
+	<meta http-equiv="expires" content="0">
+	<title>cm前端应用框架</title>
+	<link rel="stylesheet" type="text/css" href="./css/reset.css?v=0.0.1">
+	<link rel="stylesheet" type="text/css" href="./icon/style.css?v=0.0.1">
+	<link rel="stylesheet" type="text/css" href="./css/mCustomScrollbar.css?v=0.0.1">
+	<link rel="stylesheet" type="text/css" href="./css/cm.css?v=0.0.1">
+	<script type="text/javascript" src="./js/jquery/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="./js/jquery/jquery.mousewheel.js"></script>
+	<script type="text/javascript" src="./js/jquery/jquery.mCustomScrollbar.js"></script>
+	<script type="text/javascript" src="./js/jquery/jqueryExtend.js"></script>
+</head>
+<body>
+	<div id="header">
+		<h1 class="fl"><a href="index.html">cm前端应用框架</a><b></b></h1>
+		<div class="nav fl">
+			<div class="abox">
+				<a href="index.html">首页</a>
+			</div>
+		</div>
+		<div class="fr">
+			<a href="javascript:void(0);" class="icon-cog st"></a>
+			<a href="javascript:void(0);" class="icon-switch st"></a>
+		</div>
+		<div class="clr"></div>
+	</div>
+
+	<div id="main">
+		<div id="main-left">
+			<div id="left-nav" class="nav"></div>
+		</div>
+		<div id="main-right">
+			<div class="row-2 infoList">
+				<p class="dsc">使用获取\设置数据请加载<a href="./js/fncm/data.js">data.js</a>
+					<br/>FnData(dataName/*获取key值的元素属性名称*/, cut/*下一级对象的拆分点*/) 为构造函数，fnData = new FnData('data-name', '-');
+				<p class="dsc">使用数据绑定请加载<a href="./js/fncm/dataBind.js">dataBind.js</a></p>
+			</div>
+			<div class="row-4 infoList" id="get">
+				<h3 class="ttl">获取数据</h3>
+				<p class="dsc">使用方法：<span class="b">fndata.getData(dom,isEmpty)</span></p>
+				<pre>
+	dom => 数据节点层
+	isEmpty => 是否返回空数据
+				</pre>
+				<div class="dsc">实例：
+					<pre>
+	DOM: 
+	&lt;div id="fnData"&gt;
+		&lt;div&gt;&lt;input type="text" data-name="name"/&gt;&lt;/div&gt;
+		&lt;div data-name="has" data-type="array"&gt;
+			&lt;input type="text" /&gt;
+			&lt;input type="text" /&gt;
+		&lt;/div&gt;
+		&lt;div data-name="tms" data-type="array" data-arType="objAr"&gt;
+			&lt;div data-ar="obj"&gt;
+				&lt;input type="text" data-arname="a" /&gt;
+				&lt;input type="text" data-arname="b" /&gt;
+			&lt;/div&gt;
+			&lt;div data-ar="obj"&gt;
+				&lt;input type="text" data-arname="a" /&gt;
+				&lt;input type="text" data-arname="b" /&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+		&lt;div data-name="objz" data-type="object"&gt;
+			&lt;input type="text" data-name-1="fd" /&gt;
+			&lt;div data-type="array" data-name-1="ar"&gt;
+				&lt;input type="text" /&gt;
+				&lt;input type="text"/&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+
+	数据：{
+		name:'String',
+		has:['String','String'],
+		tms:[
+			{a:1,b:2},
+			{a:11,b:22}
+		],
+		objz:{
+			fd:'String',
+			ar:['String','String']
+		}
+	}
+					</pre>
+				<div id="fnData" style="line-height:18px;">
+					<div>name:<input type="text" data-name="name"/></div>
+					<div data-name="has" data-type="array">
+					has:[
+						<input type="text" />,
+						<input type="text" />
+						]
+					</div>
+					<div data-name="tms" data-type="array" data-arType="objAr">
+					tms:[
+						<div data-ar="obj">
+							{a:<input type="text" data-arname="a" />
+							b:<input type="text" data-arname="b" />},
+						</div>
+						<div data-ar="obj">
+							{a:<input type="text" data-arname="a" />
+							b:<input type="text" data-arname="b" />}
+						</div>
+					]
+					</div>
+					<div data-name="objz" data-type="object">
+					objz:{
+						fd:<input type="text" data-name-1="fd" />
+						<div data-type="array" data-name-1="ar">
+						ar:[
+							<input type="text" />,
+							<input type="text"/>
+							]
+						</div>
+						}
+					</div>
+					<button id="getData">提交</button>
+					<script type="text/javascript">
+						$('#getData').click(function(){
+							var _d = fndata.getData($('#fnData'))
+							$('#showDataCode').html(cd.structureHtml(_d))
+							console.log(_d)
+						})
+					</script>
+				</div>
+				<pre id="showDataCode">
+
+				</pre>
+				</div>
+			</div>
+
+			<div class="row-4 infoList" id="set">
+				<h3 class="ttl">数据赋值</h3>
+				<p class="dsc">使用方法：<span class="b">fndata.setData(dom, data)</span></p>
+				<pre>
+	dom => 数据节点层
+	data => 数据
+				</pre>
+			</div>
+
+			<div class="row-4 infoList" id="set">
+				<h3 class="ttl">数据绑定</h3>
+				<p class="dsc">使用方法：<span class="b">dataBind.run(s); dataBind.atKeyVal(mt,t)</span></p>
+				<p class="dsc">设置元素属性 data-bind="dataName"</span></p>
+				<pre>
+	s => 绑定集合 [dataName,dataName,...]
+	mt => 绑定的数据名 dataName
+	t => 初始值（如没哟，则获取输入框的值） String
+				</pre>
+			</div>
+		</div>
+	</div>
+
+	<div id="footer"></div>
+	<script type="text/javascript" src="./js/route/route.js?v=0.0.1"></script>
+	<script type="text/javascript" src="./js/cm.js?v=0.0.1"></script>
+	<script type="text/javascript" src="./js/fncm/createHtml.js?v=0.0.1"></script>
+	<script type="text/javascript" src="./js/fncm/RegExp.js?v=0.0.1"></script>
+	<script type="text/javascript" src="./js/fncm/data.js?v=0.0.1"></script>
+	<script type="text/javascript" src="./js/fncm/codeShow.js?v=0.0.1"></script>
+	<script type="text/javascript" src="js/html.js?v=0.0.1"></script>
+	<script type="text/javascript" src="js/doc.js?v=0.0.1"></script>
+</body>
+</html>
