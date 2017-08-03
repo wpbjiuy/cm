@@ -97,7 +97,103 @@ dataBind.atKeyVal = function(mt,t){
 			dataBind.setValue(_m.eq(0),v)
 		}
 	})
+}  
+
+/**
+* 监听数据变化
+*/
+dataBind.jtObj = function (obj,callback){
+	for(var k in obj){
+		jiuyDefineReactive(obj, k, obj[k], callback)
+	}
 }
+
+/**
+* 数据绑定
+* obj => 输数， key => 绑定数据的key值， val => 绑定初始值， customSetter => 当设置数据属性值后进行的回调函数
+*/
+dataBind.defineReactive = function (obj, key, val, customSetter) {
+
+  Object.defineProperty(obj, key, {
+    enumerable: true,
+    configurable: true,
+    get: function reactiveGetter () {
+		return val;
+    },
+    set: function reactiveSetter (newVal) {
+		if (newVal === val || (newVal !== newVal && val !== val)) {
+			return;
+		}
+		if (customSetter && Object.prototype.toString.call(customSetter) == '[object Function]') {
+			customSetter(key, newVal);
+		}
+		val = newVal;
+    }
+  });
+}
+
+/**
+* ES5 下的数据绑定
+* dom => 数据层的祖节点(数据绑定节点必须是标签数据属性'data-bind="dataKey"')， data => 数据
+*/
+dataBind._bind = function(data,dom){
+	var rsult = {
+		data:data
+	};
+	rsult._dom = dom || document;
+
+	rsult.seEls = (function(d){
+		var r = {}
+		for(let k in d) r[k] = [];
+		return r
+	})(data)
+
+	rsult._bindSet = function(k,_el){
+		_el.onkeydown = function(){
+			var _self = this
+			
+			setTimeout(function(){
+				data[k] = _self.value
+			},50)
+		}
+		_el.onchange = function(){
+			data[k] = this.value
+			this.blur()
+		}
+	}
+
+	rsult._bindEl = function(el){
+		var _k = el.dataset.bind, seEls = rsult.seEls;
+		var _set = function(k,v){
+			seEls[k].forEach(function(_el){
+				_el.value === undefined ? (_el.innerText = v) : (_el.value = v)
+			})
+		}
+		
+		if(_k in data){
+			var v = data[_k]
+
+			seEls[_k].push(el);
+
+			el.value === undefined ? (el.innerText = v) : (el.value = v, rsult._bindSet(_k, el));
+
+			if(seEls[_k].length < 2) dataBind.defineReactive(data, _k, v, _set);
+		}
+	}
+
+	rsult._dom.querySelectorAll('[data-bind]').forEach(rsult._bindEl)
+
+	rsult.add = function(el,v){
+		var _k = el.dataset.bind
+		if(v !== undefined) this.data[_k] = v;
+		if(this.data[_k] === undefined) this.data[_k] = null;
+
+		this.seEls[_k] ? (v = this.data[_k], (el.value === undefined ? (el.innerText = v) : (el.value = v)), this.seEls[_k].push(el)) : (this.seEls[_k] = [], this._bindEl(el))
+	}
+
+	return rsult
+}
+
 
 // dataBind.app(function(s){
 // 	s.svName = 'a'
