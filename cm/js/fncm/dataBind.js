@@ -104,7 +104,7 @@ dataBind.atKeyVal = function(mt,t){
 */
 dataBind.jtObj = function (obj,callback){
 	for(var k in obj){
-		jiuyDefineReactive(obj, k, obj[k], callback)
+		this.defineReactive(obj, k, obj[k], callback)
 	}
 }
 
